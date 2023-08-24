@@ -4,21 +4,21 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
 
 @Getter
 @Setter
 @NoArgsConstructor
-@MappedSuperclass
 public class Comment {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
-    @ManyToOne
+    private String id;
+    @DBRef(db = "sofdb")
+    @Field(name = "comment_user")
     private User user;
-    @ManyToOne
+    @DBRef(db = "sofdb")
+    @Field(name = "comment_to_question")
     private Question question;
     private String description;
-
-
 }

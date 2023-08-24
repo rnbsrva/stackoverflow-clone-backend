@@ -3,33 +3,30 @@ package com.akerke.stackoverflow.model;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
 
 import java.util.List;
 import java.util.Set;
 
-@Entity
 @Getter
 @Setter
 @Document(collection = "answer")
 public class Answer {
     @Id
-    private Long id;
-    @ManyToOne
+    private String id;
+    @DBRef(db = "sofdb")
+    @Field(name = "answer_question")
     private Question question;
-    @ManyToOne
+    @DBRef(db = "sofdb")
+    @Field(name = "answer_user")
     private User user;
     private String description;
-    @ManyToMany
-    @JoinTable(
-            name = "answer_user",
-            joinColumns = @JoinColumn(name = "answer_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id")
-    )
+    @DBRef(db = "sofdb")
+    @Field(name = "answer_users")
     private Set<User> likedUsers;
-    @OneToMany(
-            mappedBy = "answer",
-            cascade = CascadeType.ALL
-    )
+    @DBRef(db = "sofdb")
+    @Field(name = "answer_comments")
     private List<CommentAnswer> comments;
 }

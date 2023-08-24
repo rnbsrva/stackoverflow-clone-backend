@@ -1,6 +1,6 @@
 package com.akerke.stackoverflow.service;
 
-import com.akerke.stackoverflow.dto.UserDTO.UserDTO;
+import com.akerke.stackoverflow.dto.UserDTO;
 import com.akerke.stackoverflow.model.User;
 
 import java.util.List;

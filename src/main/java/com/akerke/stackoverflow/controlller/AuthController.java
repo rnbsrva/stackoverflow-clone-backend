@@ -1,6 +1,6 @@
 package com.akerke.stackoverflow.controlller;
 
-import com.akerke.stackoverflow.dto.UserDTO.UserDTO;
+import com.akerke.stackoverflow.dto.UserDTO;
 import com.akerke.stackoverflow.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

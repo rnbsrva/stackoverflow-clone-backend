@@ -1,6 +1,5 @@
-package com.akerke.stackoverflow.dto.UserDTO;
+package com.akerke.stackoverflow.dto;
 
-import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 
 public record UserDTO(

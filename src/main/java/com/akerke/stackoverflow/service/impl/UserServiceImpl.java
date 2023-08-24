@@ -1,8 +1,7 @@
 package com.akerke.stackoverflow.service.impl;
 
 import com.akerke.stackoverflow.constants.Role;
-import com.akerke.stackoverflow.dto.UserDTO.UserDTO;
-import com.akerke.stackoverflow.model.Question;
+import com.akerke.stackoverflow.dto.UserDTO;
 import com.akerke.stackoverflow.model.User;
 import com.akerke.stackoverflow.repository.UserRepository;
 import com.akerke.stackoverflow.service.UserService;

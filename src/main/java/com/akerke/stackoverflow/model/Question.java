@@ -6,11 +6,12 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
 
 import java.util.List;
 
-@Entity
 @Getter
 @Setter
 @AllArgsConstructor
@@ -18,33 +19,21 @@ import java.util.List;
 @Document(collection = "question")
 public class Question {
     @Id
-    private Long id;
-    @ManyToOne
-    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    private String id;
+    @DBRef
     private User user;
     private String title;
     private String description;
     @Enumerated(EnumType.STRING)
     private QuestionStatus status;
-
-    @OneToMany(
-            mappedBy = "question",
-            cascade = CascadeType.ALL
-    )
+    @DBRef(db = "sofdb")
+    @Field(name = "answers")
     private List<Answer> answers;
-
-    @ManyToMany
-    @JoinTable(
-            name = "question_tag",
-            joinColumns = @JoinColumn(name = "question_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "tag_id", referencedColumnName = "id")
-    )
+    @DBRef(db = "sofdb")
+    @Field(name = "question_tags")
     private List<Tag> tags;
-
-    @OneToMany(
-            mappedBy = "question",
-            cascade = CascadeType.ALL
-    )
-    private List<CommentAnswer> comments;
+    @DBRef(db = "sofdb")
+    @Field(name = "question_comments")
+    private List<CommentQuestion> comments;
 
 }
