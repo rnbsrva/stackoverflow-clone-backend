@@ -16,17 +16,13 @@ import java.util.Set;
 public class Answer {
     @Id
     private String id;
-    @DBRef(db = "sofdb")
     @Field(name = "answer_question")
     private Question question;
-    @DBRef(db = "sofdb")
     @Field(name = "answer_user")
     private User user;
     private String description;
-    @DBRef(db = "sofdb")
     @Field(name = "answer_users")
     private Set<User> likedUsers;
-    @DBRef(db = "sofdb")
     @Field(name = "answer_comments")
-    private List<CommentAnswer> comments;
+    private List<Comment> comments;
 }

@@ -14,11 +14,9 @@ import org.springframework.data.mongodb.core.mapping.Field;
 public class Comment {
     @Id
     private String id;
-    @DBRef(db = "sofdb")
     @Field(name = "comment_user")
     private User user;
-    @DBRef(db = "sofdb")
     @Field(name = "comment_to_question")
     private Question question;
-    private String description;
+    private String content;
 }

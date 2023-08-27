@@ -2,6 +2,10 @@ package com.akerke.stackoverflow.model;
 
 import com.akerke.stackoverflow.constants.Role;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,15 +13,19 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDateTime;
+import java.util.Collection;
 import java.util.List;
 
 @Getter
 @Setter
 @Document(collection = "user_")
 @NoArgsConstructor
-public class User {
+public class User implements UserDetails {
 
     @Transient
     public static final String SEQUENCE_NAME = "users_sequence";
@@ -30,19 +38,48 @@ public class User {
     private String email;
     @JsonIgnore
     private String password;
-    @DBRef
     private List<Question> questions;
     @Enumerated(EnumType.STRING)
     private Role role;
-    private LocalDateTime createdTime = LocalDateTime.now();
 
-    public User(String name, String surname, String email, String password, List<Question> questions, Role role, LocalDateTime createdTime) {
+    public User(String name, String surname, String email, String password, List<Question> questions, Role role) {
         this.name = name;
         this.surname = surname;
         this.email = email;
         this.password = password;
         this.questions = questions;
         this.role = role;
-        this.createdTime = createdTime;
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        var l = List.of(new SimpleGrantedAuthority("ROLE_".concat(role.name())));
+        System.out.println(l.get(0).getAuthority());
+        return l;
+    }
+
+    @Override
+    public String getUsername() {
+        return this.email;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
     }
 }

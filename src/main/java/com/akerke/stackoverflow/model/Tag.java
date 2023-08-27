@@ -18,7 +18,6 @@ public class Tag {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private String id;
     private String title;
-    @DBRef(db = "sofdb")
     @Field(name = "tag_questions")
     private List<Question> questions;
 }

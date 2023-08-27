@@ -20,20 +20,16 @@ import java.util.List;
 public class Question {
     @Id
     private String id;
-    @DBRef
     private User user;
     private String title;
     private String description;
     @Enumerated(EnumType.STRING)
     private QuestionStatus status;
-    @DBRef(db = "sofdb")
     @Field(name = "answers")
     private List<Answer> answers;
-    @DBRef(db = "sofdb")
     @Field(name = "question_tags")
     private List<Tag> tags;
-    @DBRef(db = "sofdb")
     @Field(name = "question_comments")
-    private List<CommentQuestion> comments;
+    private List<Comment> comments;
 
 }
