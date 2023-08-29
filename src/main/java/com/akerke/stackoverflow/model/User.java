@@ -1,7 +1,10 @@
 package com.akerke.stackoverflow.model;
 
 import com.akerke.stackoverflow.constants.Role;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
@@ -20,11 +23,15 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 
 @Getter
 @Setter
 @Document(collection = "user_")
 @NoArgsConstructor
+@JsonIdentityInfo(
+        generator = ObjectIdGenerators.PropertyGenerator.class,
+        property = "id")
 public class User implements UserDetails {
 
     @Transient
@@ -38,6 +45,7 @@ public class User implements UserDetails {
     private String email;
     @JsonIgnore
     private String password;
+    @DBRef(lazy = true)
     private List<Question> questions;
     @Enumerated(EnumType.STRING)
     private Role role;
@@ -53,7 +61,7 @@ public class User implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        var l = List.of(new SimpleGrantedAuthority("ROLE_".concat(role.name())));
+        var l = List.of(new SimpleGrantedAuthority(role.name()));
         System.out.println(l.get(0).getAuthority());
         return l;
     }
@@ -81,5 +89,20 @@ public class User implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    @Override
+    public boolean equals(Object obj){
+        if (obj == this)
+            return true;
+
+        if (!(obj instanceof User otherCard))
+            return false;
+
+        if (!Objects.equals(otherCard.name, this.name))       return false;
+        if (!Objects.equals(otherCard.email, this.email))     return false;
+        if (!otherCard.role.equals(this.role)) return false;
+        if (!otherCard.surname.equals(this.surname))   return false;
+        return otherCard.password.equals(this.password);
     }
 }

@@ -4,6 +4,9 @@ import com.akerke.stackoverflow.constants.Role;
 import com.akerke.stackoverflow.dto.AuthRequest;
 import com.akerke.stackoverflow.dto.TokenResponse;
 import com.akerke.stackoverflow.dto.UserDTO;
+import com.akerke.stackoverflow.dto.UserUpdateDTO;
+import com.akerke.stackoverflow.exception.EntityNotFoundException;
+import com.akerke.stackoverflow.mapper.UserMapper;
 import com.akerke.stackoverflow.model.User;
 import com.akerke.stackoverflow.repository.UserRepository;
 import com.akerke.stackoverflow.security.CustomUserDetailsService;
@@ -20,6 +23,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import static com.akerke.stackoverflow.constants.TokenType.ACCESS;
@@ -35,25 +39,37 @@ public class UserServiceImpl implements UserService {
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager manager;
     private final CustomUserDetailsService userDetailsService;
+    private final UserMapper userMapper;
 
     @Override
-    public User findById(long id) {
-        return null;
+    public User findById(Long id) {
+        return userRepository.findById(id).orElseThrow(()->new EntityNotFoundException(User.class, id));
     }
 
     @Override
     public Map<String, Object> save(UserDTO userDTO) {
-        User user = new User(
-                userDTO.name(),
-                userDTO.surname(),
-                userDTO.email(),
-                userDTO.password(),
-                new ArrayList<>(),
-                Role.ROLE_USER
-        );
-
+        User user = userMapper.toModel(userDTO, passwordEncoder.encode(userDTO.password()));
         userRepository.save(user);
         return Map.of("user", user, "tokens", tokenResponse(user));
+    }
+
+    @Override
+    public List<User> getAllUsers() {
+        return userRepository.findAll();
+    }
+
+    @Override
+    public void deleteUser(Long id) {
+        userRepository.delete(this.findById(id));
+    }
+
+    @Override
+    public void update(UserUpdateDTO userRequest, Long id) {
+        User user = this.findById(id);
+        userMapper.update(userRequest, user);
+        if(userRequest.password()!=null)
+            user.setPassword(passwordEncoder.encode(userRequest.password()));
+        userRepository.save(user);
     }
 
     @Override

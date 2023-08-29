@@ -9,7 +9,7 @@ import static io.jsonwebtoken.SignatureAlgorithm.*;
 @Getter
 @AllArgsConstructor
 public enum TokenType {
-    ACCESS(60, HS384),  // 1hour
+    ACCESS(1440, HS384),  // 1hour
     REFRESH(1440, HS512); // 1day
 
     private final Integer expirationMinute;
