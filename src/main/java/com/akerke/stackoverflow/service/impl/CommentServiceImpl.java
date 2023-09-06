@@ -8,7 +8,6 @@ import com.akerke.stackoverflow.model.Comment;
 import com.akerke.stackoverflow.model.Question;
 import com.akerke.stackoverflow.repository.CommentRepository;
 import com.akerke.stackoverflow.repository.QuestionRepository;
-import com.akerke.stackoverflow.repository.UserRepository;
 import com.akerke.stackoverflow.service.CommentService;
 import com.akerke.stackoverflow.service.QuestionService;
 import com.akerke.stackoverflow.service.UserService;

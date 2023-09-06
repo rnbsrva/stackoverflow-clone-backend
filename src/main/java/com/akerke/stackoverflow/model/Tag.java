@@ -1,6 +1,5 @@
 package com.akerke.stackoverflow.model;
 
-import com.akerke.stackoverflow.constants.TagName;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.mongodb.core.mapping.DBRef;
@@ -20,7 +19,7 @@ public class Tag {
     public static final String SEQUENCE_NAME = "tag_sequence";
     @Id
     private Long id;
-    private TagName title;
+    private String title;
     @Field(name = "tag_questions")
     private List<Question> questions;
 }
