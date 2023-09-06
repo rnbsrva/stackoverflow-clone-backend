@@ -11,11 +11,11 @@ import java.util.Map;
 public interface UserService {
 
 
-    User findById(Long id);
+    User getById(Long id);
 
     Map<String, Object> save(UserDTO UserDTO);
 
-    List<User> getAllUsers();
+    List<User> getAll();
 
     void deleteUser(Long id);
 

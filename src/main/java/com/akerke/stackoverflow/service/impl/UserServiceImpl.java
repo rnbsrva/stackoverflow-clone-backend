@@ -7,10 +7,12 @@ import com.akerke.stackoverflow.dto.UserDTO;
 import com.akerke.stackoverflow.dto.UserUpdateDTO;
 import com.akerke.stackoverflow.exception.EntityNotFoundException;
 import com.akerke.stackoverflow.mapper.UserMapper;
+import com.akerke.stackoverflow.model.Question;
 import com.akerke.stackoverflow.model.User;
 import com.akerke.stackoverflow.repository.UserRepository;
 import com.akerke.stackoverflow.security.CustomUserDetailsService;
 import com.akerke.stackoverflow.security.JwtUtil;
+import com.akerke.stackoverflow.service.QuestionService;
 import com.akerke.stackoverflow.service.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.json.JsonMapper;
@@ -40,9 +42,10 @@ public class UserServiceImpl implements UserService {
     private final AuthenticationManager manager;
     private final CustomUserDetailsService userDetailsService;
     private final UserMapper userMapper;
+    private final QuestionService questionService;
 
     @Override
-    public User findById(Long id) {
+    public User getById(Long id) {
         return userRepository.findById(id).orElseThrow(()->new EntityNotFoundException(User.class, id));
     }
 
@@ -54,18 +57,22 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<User> getAllUsers() {
+    public List<User> getAll() {
         return userRepository.findAll();
     }
 
     @Override
     public void deleteUser(Long id) {
-        userRepository.delete(this.findById(id));
+        User user = this.getById(id);
+        var list = user.getQuestions().stream().map(Question::getId).toList();
+        list.forEach(questionService::deleteById);
+
+        userRepository.delete(user);
     }
 
     @Override
     public void update(UserUpdateDTO userRequest, Long id) {
-        User user = this.findById(id);
+        User user = this.getById(id);
         userMapper.update(userRequest, user);
         if(userRequest.password()!=null)
             user.setPassword(passwordEncoder.encode(userRequest.password()));

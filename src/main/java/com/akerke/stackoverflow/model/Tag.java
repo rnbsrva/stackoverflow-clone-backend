@@ -1,5 +1,6 @@
 package com.akerke.stackoverflow.model;
 
+import com.akerke.stackoverflow.constants.TagName;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.mongodb.core.mapping.DBRef;
@@ -14,10 +15,12 @@ import java.util.List;
 @Setter
 @Document(collection = "tag")
 public class Tag {
+
+    @Transient
+    public static final String SEQUENCE_NAME = "tag_sequence";
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private String id;
-    private String title;
+    private Long id;
+    private TagName title;
     @Field(name = "tag_questions")
     private List<Question> questions;
 }

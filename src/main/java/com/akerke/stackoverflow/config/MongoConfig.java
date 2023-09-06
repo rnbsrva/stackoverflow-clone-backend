@@ -16,9 +16,10 @@ public class MongoConfig {
 
 
     private @Value("${spring.data.mongodb.database}") String db;
+    private @Value("${spring.data.mongodb.uri}") String uri;
     @Bean
     public MongoClient mongo() {
-        final ConnectionString connectionString = new ConnectionString("mongodb://localhost:27017/"+db);
+        final ConnectionString connectionString = new ConnectionString(uri+db);
         final MongoClientSettings mongoClientSettings = MongoClientSettings.builder().applyConnectionString(connectionString).build();
         return MongoClients.create(mongoClientSettings);
     }

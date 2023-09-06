@@ -1,6 +1,7 @@
 package com.akerke.stackoverflow.controlller;
 
 import com.akerke.stackoverflow.dto.UserUpdateDTO;
+import com.akerke.stackoverflow.service.QuestionService;
 import com.akerke.stackoverflow.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -16,14 +17,14 @@ public class UserController {
 
     @GetMapping
     ResponseEntity<?> getAll() {
-        return ResponseEntity.ok(userService.getAllUsers());
+        return ResponseEntity.ok(userService.getAll());
     }
 
     @GetMapping("{id}")
     ResponseEntity<?> getById(
             @PathVariable Long id
     ) {
-        return ResponseEntity.ok(userService.findById(id));
+        return ResponseEntity.ok(userService.getById(id));
     }
 
     @PutMapping("{id}")
@@ -40,7 +41,7 @@ public class UserController {
             @PathVariable Long id
     ) {
         userService.deleteUser(id);
-        return ResponseEntity.accepted().build();
+        return ResponseEntity.noContent().build();
     }
 
 }

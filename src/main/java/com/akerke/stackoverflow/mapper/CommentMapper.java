@@ -14,7 +14,7 @@ import java.util.ArrayList;
 
 @Mapper(imports = {
         ArrayList.class, Question.class,
-        Tag.class, Comment.class, Answer.class},
+        Comment.class},
         nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE,
         nullValueCheckStrategy = NullValueCheckStrategy.ALWAYS)
 public interface CommentMapper {

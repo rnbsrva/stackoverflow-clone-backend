@@ -1,6 +1,8 @@
 package com.akerke.stackoverflow.controlller;
 
+import com.akerke.stackoverflow.dto.CommentDTO;
 import com.akerke.stackoverflow.dto.QuestionDTO;
+import com.akerke.stackoverflow.service.CommentService;
 import com.akerke.stackoverflow.service.QuestionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -8,36 +10,36 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("questions")
+@RequestMapping("comments")
 @RequiredArgsConstructor
-public class QuestionController {
+public class CommentController {
 
-    private final QuestionService questionService;
+    private final CommentService commentService;
 
     @GetMapping()
     ResponseEntity<?> getAll(){
-        return ResponseEntity.ok(questionService.getAll());
+        return ResponseEntity.ok(commentService.getAll());
     }
 
     @GetMapping("{id}")
     ResponseEntity<?> getById(
             @PathVariable Long id
     ){
-        return ResponseEntity.ok(questionService.getById(id));
+        return ResponseEntity.ok(commentService.getById(id));
     }
 
     @PostMapping()
     ResponseEntity<?> save(
-            @RequestBody QuestionDTO questionDTO
-            ){
-        return ResponseEntity.status(HttpStatus.CREATED).body(questionService.save(questionDTO));
+            @RequestBody CommentDTO commentDTO
+    ){
+        return ResponseEntity.status(HttpStatus.CREATED).body(commentService.save(commentDTO));
     }
 
     @DeleteMapping("{id}")
     ResponseEntity<?> delete(
             @PathVariable Long id
     ){
-        questionService.deleteById(id);
+        commentService.deleteById(id);
         return ResponseEntity.noContent().build();
     }
 

@@ -8,12 +8,12 @@ import java.util.List;
 public interface QuestionService {
 
     public List<Question> getAll();
+    public List<Question> getUserQuestions(Long id);
     public Question getById(Long id);
 
     public Question save (QuestionDTO questionDTO);
 
     public boolean deleteById (Long id);
 
-    //update
 
 }

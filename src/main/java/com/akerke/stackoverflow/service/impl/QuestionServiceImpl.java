@@ -32,6 +32,12 @@ public class QuestionServiceImpl implements QuestionService {
     }
 
     @Override
+    public List<Question> getUserQuestions(Long id) {
+        User user = userRepository.findById(id).orElseThrow();
+        return questionRepository.findAllById(user.getQuestions().stream().map(Question::getId).toList());
+    }
+
+    @Override
     public Question getById(Long id) {
         return questionRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(Question.class, id));
     }
@@ -58,6 +64,8 @@ public class QuestionServiceImpl implements QuestionService {
         User qOwner = userRepository.findById(question.getUser().getId()).orElseThrow();
         if (qOwner.equals(owner)) {
             questionRepository.delete(question);
+            owner.getQuestions().remove(question);
+            userRepository.save(owner);
             return true;
         }
         return false;

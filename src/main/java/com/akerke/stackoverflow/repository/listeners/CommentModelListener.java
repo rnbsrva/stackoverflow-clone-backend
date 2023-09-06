@@ -1,6 +1,8 @@
-package com.akerke.stackoverflow.repository;
 
-import com.akerke.stackoverflow.model.User;
+package com.akerke.stackoverflow.repository.listeners;
+
+import com.akerke.stackoverflow.model.Comment;
+import com.akerke.stackoverflow.model.Question;
 import com.akerke.stackoverflow.service.impl.SequenceGeneratorService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.mongodb.core.mapping.event.AbstractMongoEventListener;
@@ -10,14 +12,14 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class UserModelListener extends AbstractMongoEventListener<User> {
+public class CommentModelListener extends AbstractMongoEventListener<Comment> {
 
     private final SequenceGeneratorService sequenceGenerator;
 
     @Override
-    public void onBeforeConvert(BeforeConvertEvent<User> event) {
+    public void onBeforeConvert(BeforeConvertEvent<Comment> event) {
         if (event.getSource().getId() == null || event.getSource().getId() < 1 ) {
-            event.getSource().setId(sequenceGenerator.generateSequence(User.SEQUENCE_NAME));
+            event.getSource().setId(sequenceGenerator.generateSequence(Comment.SEQUENCE_NAME));
         }
     }
 

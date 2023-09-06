@@ -1,5 +1,7 @@
 package com.akerke.stackoverflow.model;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -13,9 +15,15 @@ import java.util.Set;
 @Getter
 @Setter
 @Document(collection = "answer")
+@JsonIdentityInfo(
+        generator = ObjectIdGenerators.PropertyGenerator.class,
+        property = "id")
 public class Answer {
+
+    @Transient
+    public static final String SEQUENCE_NAME = "answers_sequence";
     @Id
-    private String id;
+    private Long id;
     @Field(name = "answer_question")
     private Question question;
     @Field(name = "answer_user")
