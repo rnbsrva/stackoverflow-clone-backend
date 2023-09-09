@@ -10,10 +10,11 @@ import java.util.Map;
 
 public interface UserService {
 
+    void register(UserDTO userDTO);
 
     User getById(Long id);
 
-    Map<String, Object> save(UserDTO UserDTO);
+    Map<String, Object> save(String data);
 
     List<User> getAll();
 

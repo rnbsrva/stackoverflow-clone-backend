@@ -6,6 +6,8 @@ import com.akerke.stackoverflow.dto.TokenResponse;
 import com.akerke.stackoverflow.dto.UserDTO;
 import com.akerke.stackoverflow.dto.UserUpdateDTO;
 import com.akerke.stackoverflow.exception.EntityNotFoundException;
+import com.akerke.stackoverflow.mail.EmailDetails;
+import com.akerke.stackoverflow.mail.EmailService;
 import com.akerke.stackoverflow.mapper.UserMapper;
 import com.akerke.stackoverflow.model.Question;
 import com.akerke.stackoverflow.model.User;
@@ -18,13 +20,16 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.json.JsonMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -43,14 +48,27 @@ public class UserServiceImpl implements UserService {
     private final CustomUserDetailsService userDetailsService;
     private final UserMapper userMapper;
     private final QuestionService questionService;
+    private final EmailService emailService;
+    private final EncryptionService encryptionService;
+
+
+    @SneakyThrows
+    @Override
+    public void register(UserDTO userDTO) {
+        String text = "http://localhost:8080/auth/verification?data="+encryptionService.encodeDTOToString(userDTO);
+        EmailDetails emailDetails =  new EmailDetails(userDTO.email(), text, "Verify your email", "");
+        emailService.sendSimpleMail(emailDetails);
+    }
 
     @Override
     public User getById(Long id) {
         return userRepository.findById(id).orElseThrow(()->new EntityNotFoundException(User.class, id));
     }
 
+    @SneakyThrows
     @Override
-    public Map<String, Object> save(UserDTO userDTO) {
+    public Map<String, Object> save(String data) {
+        UserDTO userDTO = encryptionService.decodeStringToDTO(data);
         User user = userMapper.toModel(userDTO, passwordEncoder.encode(userDTO.password()));
         userRepository.save(user);
         return Map.of("user", user, "tokens", tokenResponse(user));

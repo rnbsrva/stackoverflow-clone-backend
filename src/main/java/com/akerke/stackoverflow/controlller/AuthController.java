@@ -18,11 +18,16 @@ public class AuthController {
     @PostMapping("register")
     ResponseEntity<?> register(
             @RequestBody UserDTO userDTO
-    ) {
+    )  {
+        userService.register(userDTO);
+        return ResponseEntity.status(HttpStatus.ACCEPTED).build();
+    }
 
-        return ResponseEntity
-                .status(HttpStatus.CREATED)
-                .body(userService.save(userDTO));
+    @GetMapping("verification")
+    ResponseEntity<?> confirm(
+            @RequestParam String data
+    )  {
+        return ResponseEntity.ok(userService.save(data));
     }
 
     @PostMapping("refresh-token")
