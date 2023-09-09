@@ -2,6 +2,7 @@ package com.akerke.stackoverflow.mail;
 import java.io.File;
 
 import jakarta.mail.MessagingException;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.FileSystemResource;
@@ -10,12 +11,11 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
-// Annotation
 @Service
+@RequiredArgsConstructor
 public class EmailServiceImpl implements EmailService {
 
-    @Autowired
-    private JavaMailSender javaMailSender;
+    private final JavaMailSender javaMailSender;
 
     @Value("${spring.mail.username}") private String sender;
     public String sendSimpleMail(EmailDetails details)
@@ -26,24 +26,19 @@ public class EmailServiceImpl implements EmailService {
             SimpleMailMessage mailMessage
                     = new SimpleMailMessage();
 
-            // Setting up necessary details
             mailMessage.setFrom(sender);
             mailMessage.setTo(details.recipient());
             mailMessage.setText(details.msgBody());
             mailMessage.setSubject(details.subject());
 
-            // Sending the mail
             javaMailSender.send(mailMessage);
             return "Mail Sent Successfully...";
         }
-
-        // Catch block to handle the exceptions
         catch (Exception e) {
             return "Error while Sending Mail";
         }
     }
-    public String
-    sendMailWithAttachment(EmailDetails details)
+    public String sendMailWithAttachment(EmailDetails details)
     {
         var mimeMessage
                 = javaMailSender.createMimeMessage();
@@ -58,19 +53,14 @@ public class EmailServiceImpl implements EmailService {
             mimeMessageHelper.setSubject(
                     details.subject());
 
-            FileSystemResource file
-                    = new FileSystemResource(
-                    new File(details.attachment()));
+            FileSystemResource file = new FileSystemResource(new File(details.attachment()));
 
-            mimeMessageHelper.addAttachment(
-                    file.getFilename(), file);
+            mimeMessageHelper.addAttachment(file.getFilename(), file);
 
             javaMailSender.send(mimeMessage);
             return "Mail sent Successfully";
         }
-
         catch (MessagingException e) {
-
             return "Error while sending mail!!!";
         }
     }

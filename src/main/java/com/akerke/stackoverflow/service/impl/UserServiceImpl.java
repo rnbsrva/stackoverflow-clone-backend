@@ -14,14 +14,15 @@ import com.akerke.stackoverflow.service.QuestionService;
 import com.akerke.stackoverflow.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import static com.akerke.stackoverflow.constants.TokenType.*;
 import static com.akerke.stackoverflow.util.MapUtils.toClaims;
@@ -37,8 +38,8 @@ public class UserServiceImpl implements UserService {
     private final CustomUserDetailsService userDetailsService;
     private final UserMapper userMapper;
     private final QuestionService questionService;
-    private final EmailService emailService;
     private final EncryptionService encryptionService;
+    private final KafkaTemplate<String, Object> kafkaTemplate;
 
 
     @SneakyThrows
@@ -46,7 +47,7 @@ public class UserServiceImpl implements UserService {
     public void register(UserDTO userDTO) {
         String text = "http://localhost:8080/auth/verification?data="+encryptionService.encodeDTOToString(userDTO);
         EmailDetails emailDetails =  new EmailDetails(userDTO.email(), text, "Verify your email", "");
-        emailService.sendSimpleMail(emailDetails);
+        sendEmail("email_verification", emailDetails);
     }
 
     @Override
@@ -106,21 +107,21 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void forgotPassword(String email) {
-        User user = userRepository.findByEmail(email).orElseThrow();
+        User user = userRepository.findByEmail(email).orElseThrow(()->new EntityNotFoundException(User.class, email));
         String token = jwtUtil.generateToken(RESET_PASSWORD, toClaims(user, RESET_PASSWORD), email);
         user.setResetPasswordToken(token);
         userRepository.save(user);
         String text = "http://localhost:8080/auth/reset-password?data=" + token;
         EmailDetails emailDetails =  new EmailDetails(email, text, "Reset password", "");
-        emailService.sendSimpleMail(emailDetails);
+        sendEmail("reset_password", emailDetails);
     }
 
     @Override
     public void resetPassword(String token, String newPassword) {
         var email = jwtUtil.extractUsername(token, RESET_PASSWORD);
-        var user = userRepository.findByEmail(email).orElseThrow();
+        var user = userRepository.findByEmail(email).orElseThrow(()->new EntityNotFoundException(User.class, email));
         var userDetails = userDetailsService.loadUserByUsername(email);
-        if(user.getResetPasswordToken()!=null && jwtUtil.isTokenValid(token, userDetails, RESET_PASSWORD)){
+        if(user.getResetPasswordToken()!=null && Objects.equals(token, user.getResetPasswordToken()) && jwtUtil.isTokenValid(token, userDetails, RESET_PASSWORD)){
             user.setPassword(passwordEncoder.encode(newPassword));
             user.setResetPasswordToken(null);
             userRepository.save(user);
@@ -133,6 +134,11 @@ public class UserServiceImpl implements UserService {
                 jwtUtil.generateToken(REFRESH, toClaims(user, REFRESH), user.getEmail())
         );
     }
+
+    private void sendEmail(String topic, EmailDetails emailDetails){
+        kafkaTemplate.send(topic, emailDetails);
+    }
+
 
 
 }

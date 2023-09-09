@@ -49,7 +49,8 @@ public class User implements UserDetails {
     private List<Question> questions;
     @Enumerated(EnumType.STRING)
     private Role role;
-    private String resetPasswordToken = null;
+    @JsonIgnore
+    private String resetPasswordToken;
 
     public User(String name, String surname, String email, String password, List<Question> questions, Role role) {
         this.name = name;
@@ -74,21 +75,25 @@ public class User implements UserDetails {
     }
 
     @Override
+    @JsonIgnore
     public boolean isAccountNonExpired() {
         return true;
     }
 
     @Override
+    @JsonIgnore
     public boolean isAccountNonLocked() {
         return true;
     }
 
     @Override
+    @JsonIgnore
     public boolean isCredentialsNonExpired() {
         return true;
     }
 
     @Override
+    @JsonIgnore
     public boolean isEnabled() {
         return true;
     }
