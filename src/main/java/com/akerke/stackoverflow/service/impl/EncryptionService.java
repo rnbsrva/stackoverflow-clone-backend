@@ -14,16 +14,15 @@ public class EncryptionService {
     private final ObjectMapper objectMapper;
 
     @SneakyThrows
-    public String encodeDTOToString(UserDTO dto) throws Exception {
+    public String encodeDTOToString(UserDTO dto) {
 
         String jsonData = objectMapper.writeValueAsString(dto);
         return Base64.getEncoder().encodeToString(jsonData.getBytes());
 
     }
 
-
     @SneakyThrows
-    public UserDTO decodeStringToDTO(String encryptedDTO) throws Exception {
+    public UserDTO decodeStringToDTO(String encryptedDTO) {
         byte[] decodedBytes = Base64.getDecoder().decode(encryptedDTO);
         String jsonData = new String(decodedBytes);
         return objectMapper.readValue(jsonData, UserDTO.class);

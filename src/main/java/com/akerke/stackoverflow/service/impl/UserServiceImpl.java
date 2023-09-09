@@ -1,10 +1,6 @@
 package com.akerke.stackoverflow.service.impl;
 
-import com.akerke.stackoverflow.constants.Role;
-import com.akerke.stackoverflow.dto.AuthRequest;
-import com.akerke.stackoverflow.dto.TokenResponse;
-import com.akerke.stackoverflow.dto.UserDTO;
-import com.akerke.stackoverflow.dto.UserUpdateDTO;
+import com.akerke.stackoverflow.dto.*;
 import com.akerke.stackoverflow.exception.EntityNotFoundException;
 import com.akerke.stackoverflow.mail.EmailDetails;
 import com.akerke.stackoverflow.mail.EmailService;
@@ -16,25 +12,18 @@ import com.akerke.stackoverflow.security.CustomUserDetailsService;
 import com.akerke.stackoverflow.security.JwtUtil;
 import com.akerke.stackoverflow.service.QuestionService;
 import com.akerke.stackoverflow.service.UserService;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.json.JsonMapper;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.nio.charset.StandardCharsets;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-import static com.akerke.stackoverflow.constants.TokenType.ACCESS;
-import static com.akerke.stackoverflow.constants.TokenType.REFRESH;
+import static com.akerke.stackoverflow.constants.TokenType.*;
 import static com.akerke.stackoverflow.util.MapUtils.toClaims;
 
 @Service
@@ -69,9 +58,12 @@ public class UserServiceImpl implements UserService {
     @Override
     public Map<String, Object> save(String data) {
         UserDTO userDTO = encryptionService.decodeStringToDTO(data);
-        User user = userMapper.toModel(userDTO, passwordEncoder.encode(userDTO.password()));
-        userRepository.save(user);
-        return Map.of("user", user, "tokens", tokenResponse(user));
+        if(userDTO.isSentWithin5Minutes()){
+            User user = userMapper.toModel(userDTO, passwordEncoder.encode(userDTO.password()));
+            userRepository.save(user);
+            return Map.of("user", user, "tokens", tokenResponse(user));
+        }
+        return Map.of("error", "link is expired");
     }
 
     @Override
@@ -112,10 +104,35 @@ public class UserServiceImpl implements UserService {
         return Map.of("tokens", tokenResponse(user));
     }
 
+    @Override
+    public void forgotPassword(String email) {
+        User user = userRepository.findByEmail(email).orElseThrow();
+        String token = jwtUtil.generateToken(RESET_PASSWORD, toClaims(user, RESET_PASSWORD), email);
+        user.setResetPasswordToken(token);
+        userRepository.save(user);
+        String text = "http://localhost:8080/auth/reset-password?data=" + token;
+        EmailDetails emailDetails =  new EmailDetails(email, text, "Reset password", "");
+        emailService.sendSimpleMail(emailDetails);
+    }
+
+    @Override
+    public void resetPassword(String token, String newPassword) {
+        var email = jwtUtil.extractUsername(token, RESET_PASSWORD);
+        var user = userRepository.findByEmail(email).orElseThrow();
+        var userDetails = userDetailsService.loadUserByUsername(email);
+        if(user.getResetPasswordToken()!=null && jwtUtil.isTokenValid(token, userDetails, RESET_PASSWORD)){
+            user.setPassword(passwordEncoder.encode(newPassword));
+            user.setResetPasswordToken(null);
+            userRepository.save(user);
+        }
+    }
+
     private TokenResponse tokenResponse(User user) {
         return new TokenResponse(
                 jwtUtil.generateToken(ACCESS, toClaims(user, ACCESS), user.getEmail()),
                 jwtUtil.generateToken(REFRESH, toClaims(user, REFRESH), user.getEmail())
         );
     }
+
+
 }

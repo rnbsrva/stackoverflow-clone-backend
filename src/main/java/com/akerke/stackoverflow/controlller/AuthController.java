@@ -18,15 +18,19 @@ public class AuthController {
     @PostMapping("register")
     ResponseEntity<?> register(
             @RequestBody UserDTO userDTO
-    )  {
-        userService.register(userDTO);
+    ) {
+        userService.register(new UserDTO(
+                userDTO.email(),
+                userDTO.name(),
+                userDTO.surname(),
+                userDTO.password()));
         return ResponseEntity.status(HttpStatus.ACCEPTED).build();
     }
 
     @GetMapping("verification")
     ResponseEntity<?> confirm(
             @RequestParam String data
-    )  {
+    ) {
         return ResponseEntity.ok(userService.save(data));
     }
 
@@ -37,6 +41,23 @@ public class AuthController {
         return
                 ResponseEntity
                         .ok(userService.refresh(refreshToken));
+    }
+
+    @GetMapping("forgot-password")
+    ResponseEntity<?> forgotPassword(
+            @RequestParam String email
+    ) {
+        userService.forgotPassword(email);
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("reset-password")
+    ResponseEntity<?> resetPassword(
+            @RequestParam String data,
+            @RequestHeader String newPassword
+    ){
+        userService.resetPassword(data, newPassword);
+        return ResponseEntity.ok().build();
     }
 
     @PostMapping

@@ -5,14 +5,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-// Annotation
 @RestController
-// Class
 public class EmailController {
 
     @Autowired private EmailService emailService;
 
-    // Sending a simple Email
     @PostMapping("/sendMail")
     public String
     sendMail(@RequestBody EmailDetails details)
@@ -23,7 +20,6 @@ public class EmailController {
         return status;
     }
 
-    // Sending email with attachment
     @PostMapping("/sendMailWithAttachment")
     public String sendMailWithAttachment(
             @RequestBody EmailDetails details)

@@ -18,16 +18,11 @@ public class EmailServiceImpl implements EmailService {
     private JavaMailSender javaMailSender;
 
     @Value("${spring.mail.username}") private String sender;
-
-    // Method 1
-    // To send a simple email
     public String sendSimpleMail(EmailDetails details)
     {
 
-        // Try block to check for exceptions
         try {
 
-            // Creating a simple mail message
             SimpleMailMessage mailMessage
                     = new SimpleMailMessage();
 
@@ -47,21 +42,14 @@ public class EmailServiceImpl implements EmailService {
             return "Error while Sending Mail";
         }
     }
-
-    // Method 2
-    // To send an email with attachment
     public String
     sendMailWithAttachment(EmailDetails details)
     {
-        // Creating a mime message
         var mimeMessage
                 = javaMailSender.createMimeMessage();
         MimeMessageHelper mimeMessageHelper;
 
         try {
-
-            // Setting multipart as true for attachments to
-            // be send
             mimeMessageHelper
                     = new MimeMessageHelper(mimeMessage, true);
             mimeMessageHelper.setFrom(sender);
@@ -70,7 +58,6 @@ public class EmailServiceImpl implements EmailService {
             mimeMessageHelper.setSubject(
                     details.subject());
 
-            // Adding the attachment
             FileSystemResource file
                     = new FileSystemResource(
                     new File(details.attachment()));
@@ -78,15 +65,12 @@ public class EmailServiceImpl implements EmailService {
             mimeMessageHelper.addAttachment(
                     file.getFilename(), file);
 
-            // Sending the mail
             javaMailSender.send(mimeMessage);
             return "Mail sent Successfully";
         }
 
-        // Catch block to handle MessagingException
         catch (MessagingException e) {
 
-            // Display message when exception occurred
             return "Error while sending mail!!!";
         }
     }

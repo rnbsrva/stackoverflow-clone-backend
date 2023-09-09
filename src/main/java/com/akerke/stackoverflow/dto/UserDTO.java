@@ -23,5 +23,13 @@ public record UserDTO(
                 password,
                 new Date()
         );
+
+    }
+
+    public boolean isSentWithin5Minutes() {
+        Date now = new Date();
+        long timeDifferenceInMillis = now.getTime() - sentAt.getTime();
+        long minutesDifference = timeDifferenceInMillis / (60 * 1000);
+        return minutesDifference <= 5;
     }
 }

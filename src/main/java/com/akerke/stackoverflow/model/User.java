@@ -49,6 +49,7 @@ public class User implements UserDetails {
     private List<Question> questions;
     @Enumerated(EnumType.STRING)
     private Role role;
+    private String resetPasswordToken = null;
 
     public User(String name, String surname, String email, String password, List<Question> questions, Role role) {
         this.name = name;
@@ -57,6 +58,7 @@ public class User implements UserDetails {
         this.password = password;
         this.questions = questions;
         this.role = role;
+        this.resetPasswordToken = null;
     }
 
     @Override
