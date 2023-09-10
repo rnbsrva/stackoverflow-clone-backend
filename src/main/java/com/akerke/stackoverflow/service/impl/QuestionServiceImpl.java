@@ -7,8 +7,10 @@ import com.akerke.stackoverflow.mapper.UserMapper;
 import com.akerke.stackoverflow.model.Question;
 import com.akerke.stackoverflow.model.User;
 import com.akerke.stackoverflow.repository.QuestionRepository;
+import com.akerke.stackoverflow.repository.TagRepository;
 import com.akerke.stackoverflow.repository.UserRepository;
 import com.akerke.stackoverflow.service.QuestionService;
+import com.akerke.stackoverflow.service.TagService;
 import com.akerke.stackoverflow.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
@@ -24,17 +26,12 @@ public class QuestionServiceImpl implements QuestionService {
 
     private final QuestionRepository questionRepository;
     private final QuestionMapper questionMapper;
+    private final TagService tagService;
     private final UserRepository userRepository;
 
     @Override
     public List<Question> getAll() {
         return questionRepository.findAll();
-    }
-
-    @Override
-    public List<Question> getUserQuestions(Long id) {
-        User user = userRepository.findById(id).orElseThrow();
-        return questionRepository.findAllById(user.getQuestions().stream().map(Question::getId).toList());
     }
 
     @Override
@@ -47,6 +44,9 @@ public class QuestionServiceImpl implements QuestionService {
         Question question = questionMapper.toModel(questionDTO);
         User user = userRepository.findById(questionDTO.userId()).orElseThrow();
         question.setUser(user);
+        for (Long id: questionDTO.tagIds()) {
+            question.getTags().add(tagService.getById(id));
+        }
         Question question1 = questionRepository.save(question);
         user.getQuestions().add(question1);
         userRepository.save(user);

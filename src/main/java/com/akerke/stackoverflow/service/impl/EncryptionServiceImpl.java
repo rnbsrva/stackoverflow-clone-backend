@@ -1,15 +1,18 @@
 package com.akerke.stackoverflow.service.impl;
 
 import com.akerke.stackoverflow.dto.UserDTO;
+import com.akerke.stackoverflow.service.EncryptionService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
+
 import java.util.Base64;
 
 @Component
 @RequiredArgsConstructor
-public class EncryptionService {
+public class EncryptionServiceImpl implements EncryptionService {
 
     private final ObjectMapper objectMapper;
 

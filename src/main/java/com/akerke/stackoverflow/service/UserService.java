@@ -10,11 +10,8 @@ import java.util.Map;
 
 public interface UserService {
 
-    void register(UserDTO userDTO);
 
     User getById(Long id);
-
-    Map<String, Object> save(String data);
 
     List<User> getAll();
 
@@ -22,12 +19,5 @@ public interface UserService {
 
     void update(UserUpdateDTO userRequest, Long id);
 
-    Map<String,Object> refresh(String refreshToken);
-
-    Map<String,Object> auth(AuthRequest authRequest);
-
-    void forgotPassword (String email);
-
-    void resetPassword(String token, String newPassword);
 
 }

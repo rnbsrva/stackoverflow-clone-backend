@@ -38,7 +38,8 @@ public class Question {
     @Enumerated(EnumType.STRING)
     private QuestionStatus status;
     @Field(name = "answers")
-    private List<Answer> answers;
+    @DBRef(lazy = true)
+        private List<Answer> answers;
     @Field(name = "question_tags")
     @DBRef(lazy = true)
     private List<Tag> tags;
