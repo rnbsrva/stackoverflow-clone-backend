@@ -33,7 +33,7 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public Comment getById(Long id) {
-        return commentRepository.findById(id).orElseThrow(()->new EntityNotFoundException(Comment.class, id));
+        return commentRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(Comment.class, id));
     }
 
     @Override
@@ -63,7 +63,9 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public void update(CommentUpdateDTO commentUpdateDTO) {
-
+    public void update(CommentUpdateDTO commentUpdateDTO, Long id) {
+        Comment comment = this.getById(id);
+        commentMapper.update(commentUpdateDTO, comment);
+        commentRepository.save(comment);
     }
 }

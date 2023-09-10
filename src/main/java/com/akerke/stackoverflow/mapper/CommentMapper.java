@@ -1,14 +1,10 @@
 package com.akerke.stackoverflow.mapper;
 
 import com.akerke.stackoverflow.dto.CommentDTO;
-import com.akerke.stackoverflow.model.Answer;
+import com.akerke.stackoverflow.dto.CommentUpdateDTO;
 import com.akerke.stackoverflow.model.Comment;
 import com.akerke.stackoverflow.model.Question;
-import com.akerke.stackoverflow.model.Tag;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.NullValueCheckStrategy;
-import org.mapstruct.NullValuePropertyMappingStrategy;
+import org.mapstruct.*;
 
 import java.util.ArrayList;
 
@@ -26,5 +22,7 @@ public interface CommentMapper {
     CommentDTO toDTO (Comment comment);
 
 
+    @Mapping(target = "id", ignore = true)
+    void update (CommentUpdateDTO commentUpdateDTO, @MappingTarget Comment comment);
 
 }

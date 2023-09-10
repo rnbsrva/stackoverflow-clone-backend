@@ -24,13 +24,22 @@ public class Answer {
     public static final String SEQUENCE_NAME = "answers_sequence";
     @Id
     private Long id;
+
     @Field(name = "answer_question")
+    @DBRef(lazy = true)
     private Question question;
+
     @Field(name = "answer_user")
+    @DBRef(lazy = true)
     private User user;
+
     private String description;
+
     @Field(name = "answer_users")
+    @DBRef(lazy = true)
     private Set<User> likedUsers;
+
     @Field(name = "answer_comments")
+    @DBRef(lazy = true)
     private List<Comment> comments;
 }

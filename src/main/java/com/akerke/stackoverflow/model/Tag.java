@@ -21,5 +21,6 @@ public class Tag {
     private Long id;
     private String title;
     @Field(name = "tag_questions")
+    @DBRef(lazy = true)
     private List<Question> questions;
 }

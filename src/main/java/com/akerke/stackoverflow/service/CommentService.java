@@ -8,15 +8,15 @@ import java.util.List;
 
 public interface CommentService {
 
-    public List<Comment> getAll();
+    List<Comment> getAll();
 
-    public Comment getById(Long id);
+    Comment getById(Long id);
 
-    public Comment save (CommentDTO commentDTO);
+    Comment save(CommentDTO commentDTO);
 
-    public boolean deleteById (Long id);
+    boolean deleteById(Long id);
 
-    public void update (CommentUpdateDTO commentUpdateDTO);
+    void update(CommentUpdateDTO commentUpdateDTO, Long id);
 
 
 }
