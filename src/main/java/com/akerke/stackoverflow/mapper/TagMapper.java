@@ -2,8 +2,8 @@ package com.akerke.stackoverflow.mapper;
 
 import com.akerke.stackoverflow.dto.TagDTO;
 import com.akerke.stackoverflow.dto.TagUpdateDTO;
-import com.akerke.stackoverflow.model.Question;
-import com.akerke.stackoverflow.model.Tag;
+import com.akerke.stackoverflow.entity.Question;
+import com.akerke.stackoverflow.entity.Tag;
 import org.mapstruct.*;
 
 import java.util.ArrayList;

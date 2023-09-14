@@ -1,8 +1,7 @@
 
 package com.akerke.stackoverflow.repository.listeners;
 
-import com.akerke.stackoverflow.model.Comment;
-import com.akerke.stackoverflow.model.Tag;
+import com.akerke.stackoverflow.entity.Tag;
 import com.akerke.stackoverflow.service.impl.SequenceGeneratorService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.mongodb.core.mapping.event.AbstractMongoEventListener;

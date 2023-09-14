@@ -1,4 +1,4 @@
-package com.akerke.stackoverflow.model;
+package com.akerke.stackoverflow.entity;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
@@ -35,11 +35,8 @@ public class Answer {
 
     private String description;
 
-    @Field(name = "answer_users")
+    @Field(name = "liked_users")
     @DBRef(lazy = true)
     private Set<User> likedUsers;
 
-    @Field(name = "answer_comments")
-    @DBRef(lazy = true)
-    private List<Comment> comments;
 }

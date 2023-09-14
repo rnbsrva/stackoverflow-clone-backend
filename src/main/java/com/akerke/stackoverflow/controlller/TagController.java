@@ -3,10 +3,14 @@ package com.akerke.stackoverflow.controlller;
 import com.akerke.stackoverflow.dto.TagDTO;
 import com.akerke.stackoverflow.dto.TagUpdateDTO;
 import com.akerke.stackoverflow.service.TagService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+
+import static com.akerke.stackoverflow.validate.Validator.validate;
 
 @RestController
 @RequestMapping("tags")
@@ -30,8 +34,11 @@ public class TagController {
 
     @PostMapping()
     ResponseEntity<?> save (
-            @RequestBody TagDTO tagDTO
+            @Valid
+            @RequestBody TagDTO tagDTO,
+            BindingResult bindingResult
             ){
+        validate(bindingResult);
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(tagService.save(tagDTO));
@@ -40,8 +47,11 @@ public class TagController {
     @PutMapping("{id}")
     ResponseEntity<?> update(
             @PathVariable Long id,
-            @RequestBody TagUpdateDTO tagUpdateDTO
+            @Valid
+            @RequestBody TagUpdateDTO tagUpdateDTO,
+            BindingResult bindingResult
             ){
+        validate(bindingResult);
         tagService.update(tagUpdateDTO, id);
         return ResponseEntity.accepted().build();
     }

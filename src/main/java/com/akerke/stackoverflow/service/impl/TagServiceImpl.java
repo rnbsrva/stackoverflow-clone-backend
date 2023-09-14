@@ -4,7 +4,7 @@ import com.akerke.stackoverflow.dto.TagDTO;
 import com.akerke.stackoverflow.dto.TagUpdateDTO;
 import com.akerke.stackoverflow.exception.EntityNotFoundException;
 import com.akerke.stackoverflow.mapper.TagMapper;
-import com.akerke.stackoverflow.model.Tag;
+import com.akerke.stackoverflow.entity.Tag;
 import com.akerke.stackoverflow.repository.TagRepository;
 import com.akerke.stackoverflow.service.TagService;
 import lombok.RequiredArgsConstructor;

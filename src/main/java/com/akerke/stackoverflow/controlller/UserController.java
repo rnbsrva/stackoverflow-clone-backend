@@ -3,9 +3,13 @@ package com.akerke.stackoverflow.controlller;
 import com.akerke.stackoverflow.dto.UserUpdateDTO;
 import com.akerke.stackoverflow.service.QuestionService;
 import com.akerke.stackoverflow.service.UserService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+
+import static com.akerke.stackoverflow.validate.Validator.validate;
 
 
 @RestController
@@ -30,8 +34,11 @@ public class UserController {
     @PutMapping("{id}")
     ResponseEntity<?> update(
             @PathVariable Long id,
-            @RequestBody UserUpdateDTO userUpdateDTO
+            @Valid
+            @RequestBody UserUpdateDTO userUpdateDTO,
+            BindingResult bindingResult
     ) {
+        validate(bindingResult);
         userService.update(userUpdateDTO, id);
         return ResponseEntity.accepted().build();
     }

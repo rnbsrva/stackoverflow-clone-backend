@@ -1,6 +1,6 @@
 package com.akerke.stackoverflow.service.impl;
 
-import com.akerke.stackoverflow.model.DatabaseSequence;
+import com.akerke.stackoverflow.entity.DatabaseSequence;
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.stereotype.Service;
 

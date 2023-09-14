@@ -1,12 +1,9 @@
 package com.akerke.stackoverflow.service;
 
-import com.akerke.stackoverflow.dto.AuthRequest;
-import com.akerke.stackoverflow.dto.UserDTO;
 import com.akerke.stackoverflow.dto.UserUpdateDTO;
-import com.akerke.stackoverflow.model.User;
+import com.akerke.stackoverflow.entity.User;
 
 import java.util.List;
-import java.util.Map;
 
 public interface UserService {
 

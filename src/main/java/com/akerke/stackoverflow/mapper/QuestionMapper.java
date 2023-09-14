@@ -2,8 +2,9 @@ package com.akerke.stackoverflow.mapper;
 
 import com.akerke.stackoverflow.constants.QuestionStatus;
 import com.akerke.stackoverflow.dto.QuestionDTO;
+import com.akerke.stackoverflow.dto.QuestionUpdateDTO;
 import com.akerke.stackoverflow.dto.UserDTO;
-import com.akerke.stackoverflow.model.*;
+import com.akerke.stackoverflow.entity.*;
 import org.mapstruct.*;
 
 import java.util.ArrayList;
@@ -24,6 +25,7 @@ public interface QuestionMapper {
     @Mapping(target = "status", expression = "java(QuestionStatus.QUESTION_NOT_SOLVED)")
     Question toModel (QuestionDTO questionDTO);
 
-    void update (UserDTO userDTO, @MappingTarget User user);
+    @Mapping(target = "id", ignore = true)
+    void update (QuestionUpdateDTO userDTO, @MappingTarget Question question);
 
 }

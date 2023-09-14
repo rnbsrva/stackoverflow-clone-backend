@@ -1,13 +1,15 @@
 package com.akerke.stackoverflow.service.impl;
 
 import com.akerke.stackoverflow.dto.*;
+import com.akerke.stackoverflow.entity.Answer;
 import com.akerke.stackoverflow.exception.EntityNotFoundException;
 import com.akerke.stackoverflow.mapper.UserMapper;
-import com.akerke.stackoverflow.model.Question;
-import com.akerke.stackoverflow.model.User;
+import com.akerke.stackoverflow.entity.Question;
+import com.akerke.stackoverflow.entity.User;
 import com.akerke.stackoverflow.repository.UserRepository;
 import com.akerke.stackoverflow.service.QuestionService;
 import com.akerke.stackoverflow.service.UserService;
+import com.akerke.stackoverflow.util.MongoUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -20,10 +22,9 @@ import java.util.List;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
-    private final PasswordEncoder passwordEncoder;
     private final UserMapper userMapper;
     private final QuestionService questionService;
-    private final MongoTemplate mongoTemplate;
+    private final MongoUtils mongoUtils;
 
 
     @Override
@@ -39,8 +40,8 @@ public class UserServiceImpl implements UserService {
     @Override
     public void deleteUser(Long id) {
         User user = this.getById(id);
-        var list = user.getQuestions().stream().map(Question::getId).toList();
-        list.forEach(questionService::deleteById);
+        mongoUtils.removeItem(id, user, Answer.class, "liked_users");
+        user.getQuestions().stream().map(Question::getId).forEach(questionService::deleteById);
         userRepository.delete(user);
     }
 
@@ -48,8 +49,6 @@ public class UserServiceImpl implements UserService {
     public void update(UserUpdateDTO userRequest, Long id) {
         User user = this.getById(id);
         userMapper.update(userRequest, user);
-        if(userRequest.password()!=null)
-            user.setPassword(passwordEncoder.encode(userRequest.password()));
         userRepository.save(user);
     }
 

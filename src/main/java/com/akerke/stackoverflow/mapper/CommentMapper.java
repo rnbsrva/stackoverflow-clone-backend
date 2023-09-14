@@ -2,8 +2,8 @@ package com.akerke.stackoverflow.mapper;
 
 import com.akerke.stackoverflow.dto.CommentDTO;
 import com.akerke.stackoverflow.dto.CommentUpdateDTO;
-import com.akerke.stackoverflow.model.Comment;
-import com.akerke.stackoverflow.model.Question;
+import com.akerke.stackoverflow.entity.Comment;
+import com.akerke.stackoverflow.entity.Question;
 import org.mapstruct.*;
 
 import java.util.ArrayList;

@@ -3,12 +3,11 @@ package com.akerke.stackoverflow.mapper;
 import com.akerke.stackoverflow.constants.Role;
 import com.akerke.stackoverflow.dto.UserDTO;
 import com.akerke.stackoverflow.dto.UserUpdateDTO;
-import com.akerke.stackoverflow.model.Question;
-import com.akerke.stackoverflow.model.User;
+import com.akerke.stackoverflow.entity.Question;
+import com.akerke.stackoverflow.entity.User;
 import org.mapstruct.*;
 
 import java.util.ArrayList;
-import java.util.Map;
 
 @Mapper(imports = {Role.class, Question.class, ArrayList.class},
         nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE,

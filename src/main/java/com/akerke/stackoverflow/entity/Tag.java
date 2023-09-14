@@ -1,4 +1,4 @@
-package com.akerke.stackoverflow.model;
+package com.akerke.stackoverflow.entity;
 
 import jakarta.persistence.*;
 import lombok.*;

@@ -1,15 +1,17 @@
 package com.akerke.stackoverflow.dto;
 
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.NotBlank;
 
 import java.util.Date;
 
 public record UserDTO(
-        @NotBlank
+        @NotBlank @Email
         String email,
-        @NotBlank
+        @NotBlank @Max(value = 25)
         String name,
-        @NotBlank
+        @NotBlank @Max(value = 50)
         String surname,
         @NotBlank
         String password,

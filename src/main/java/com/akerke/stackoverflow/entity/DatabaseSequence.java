@@ -1,6 +1,5 @@
-package com.akerke.stackoverflow.model;
+package com.akerke.stackoverflow.entity;
 
-import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

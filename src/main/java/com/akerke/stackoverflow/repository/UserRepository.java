@@ -1,6 +1,6 @@
 package com.akerke.stackoverflow.repository;
 
-import com.akerke.stackoverflow.model.User;
+import com.akerke.stackoverflow.entity.User;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 

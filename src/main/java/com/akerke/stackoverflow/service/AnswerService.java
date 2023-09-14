@@ -2,7 +2,7 @@ package com.akerke.stackoverflow.service;
 
 import com.akerke.stackoverflow.dto.AnswerDTO;
 import com.akerke.stackoverflow.dto.AnswerUpdateDTO;
-import com.akerke.stackoverflow.model.Answer;
+import com.akerke.stackoverflow.entity.Answer;
 
 import java.util.List;
 
@@ -17,5 +17,7 @@ public interface AnswerService {
     Answer update(AnswerUpdateDTO answerUpdateDTO, Long id);
 
     void delete (Long id);
+
+    boolean likeAnswer (Long id);
 
 }

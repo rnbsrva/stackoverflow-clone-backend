@@ -1,9 +1,7 @@
-package com.akerke.stackoverflow.model;
+package com.akerke.stackoverflow.entity;
 
 import com.akerke.stackoverflow.constants.QuestionStatus;
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -46,5 +44,17 @@ public class Question {
     @DBRef(lazy = true)
     @Field(name = "question_comments")
     private List<Comment> comments;
+    @DBRef(lazy = true)
+    private Answer acceptedAnswer;
 
+    public Question(User user, String title, String description, QuestionStatus status, List<Answer> answers, List<Tag> tags, List<Comment> comments) {
+        this.user = user;
+        this.title = title;
+        this.description = description;
+        this.status = status;
+        this.answers = answers;
+        this.tags = tags;
+        this.comments = comments;
+        this.acceptedAnswer = null;
+    }
 }

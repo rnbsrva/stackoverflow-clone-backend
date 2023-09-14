@@ -1,4 +1,4 @@
-package com.akerke.stackoverflow.model;
+package com.akerke.stackoverflow.entity;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;

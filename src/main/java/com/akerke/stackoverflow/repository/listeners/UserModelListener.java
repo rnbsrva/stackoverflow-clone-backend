@@ -1,6 +1,6 @@
 package com.akerke.stackoverflow.repository.listeners;
 
-import com.akerke.stackoverflow.model.User;
+import com.akerke.stackoverflow.entity.User;
 import com.akerke.stackoverflow.service.impl.SequenceGeneratorService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.mongodb.core.mapping.event.AbstractMongoEventListener;

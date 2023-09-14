@@ -4,13 +4,14 @@ import com.akerke.stackoverflow.dto.CommentDTO;
 import com.akerke.stackoverflow.dto.CommentUpdateDTO;
 import com.akerke.stackoverflow.exception.EntityNotFoundException;
 import com.akerke.stackoverflow.mapper.CommentMapper;
-import com.akerke.stackoverflow.model.Comment;
-import com.akerke.stackoverflow.model.Question;
+import com.akerke.stackoverflow.entity.Comment;
+import com.akerke.stackoverflow.entity.Question;
 import com.akerke.stackoverflow.repository.CommentRepository;
 import com.akerke.stackoverflow.repository.QuestionRepository;
 import com.akerke.stackoverflow.service.CommentService;
 import com.akerke.stackoverflow.service.QuestionService;
 import com.akerke.stackoverflow.service.UserService;
+import com.akerke.stackoverflow.util.MongoUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -25,6 +26,7 @@ public class CommentServiceImpl implements CommentService {
     private final QuestionService questionService;
     private final QuestionRepository questionRepository;
     private final CommentMapper commentMapper;
+    private final MongoUtils mongoUtils;
 
     @Override
     public List<Comment> getAll() {
@@ -55,10 +57,8 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public boolean deleteById(Long id) {
         Comment comment = commentRepository.findById(id).orElseThrow();
-        Question question = questionRepository.findById(comment.getQuestion().getId()).orElseThrow();
-        question.getComments().remove(comment);
+        mongoUtils.removeItem(comment.getQuestion().getId(), comment, Question.class, "question_comments");
         commentRepository.deleteById(id);
-        questionRepository.save(question);
         return true;
     }
 

@@ -2,7 +2,7 @@ package com.akerke.stackoverflow.service;
 
 import com.akerke.stackoverflow.dto.TagDTO;
 import com.akerke.stackoverflow.dto.TagUpdateDTO;
-import com.akerke.stackoverflow.model.Tag;
+import com.akerke.stackoverflow.entity.Tag;
 
 import java.util.List;
 
