@@ -1,15 +1,14 @@
 package com.akerke.stackoverflow.controlller;
 
-import com.akerke.stackoverflow.dto.UserUpdateDTO;
-import com.akerke.stackoverflow.service.QuestionService;
-import com.akerke.stackoverflow.service.UserService;
+import com.akerke.stackoverflow.domain.dto.UserUpdateDTO;
+import com.akerke.stackoverflow.domain.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import static com.akerke.stackoverflow.validate.Validator.validate;
+import static com.akerke.stackoverflow.common.validate.Validator.validate;
 
 
 @RestController

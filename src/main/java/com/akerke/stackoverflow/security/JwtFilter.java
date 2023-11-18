@@ -1,6 +1,5 @@
 package com.akerke.stackoverflow.security;
 
-import com.akerke.stackoverflow.constants.TokenType;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -15,7 +14,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 
-import static com.akerke.stackoverflow.constants.TokenType.*;
+import static com.akerke.stackoverflow.common.constants.TokenType.*;
 
 @Component
 @RequiredArgsConstructor

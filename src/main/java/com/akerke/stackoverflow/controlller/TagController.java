@@ -1,8 +1,8 @@
 package com.akerke.stackoverflow.controlller;
 
-import com.akerke.stackoverflow.dto.TagDTO;
-import com.akerke.stackoverflow.dto.TagUpdateDTO;
-import com.akerke.stackoverflow.service.TagService;
+import com.akerke.stackoverflow.domain.dto.TagDTO;
+import com.akerke.stackoverflow.domain.dto.TagUpdateDTO;
+import com.akerke.stackoverflow.domain.service.TagService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -10,7 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import static com.akerke.stackoverflow.validate.Validator.validate;
+import static com.akerke.stackoverflow.common.validate.Validator.validate;
 
 @RestController
 @RequestMapping("tags")

@@ -1,7 +1,7 @@
 package com.akerke.stackoverflow.security;
 
-import com.akerke.stackoverflow.exception.InvalidCredentialsException;
-import com.akerke.stackoverflow.repository.UserRepository;
+import com.akerke.stackoverflow.common.exception.InvalidCredentialsException;
+import com.akerke.stackoverflow.domain.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

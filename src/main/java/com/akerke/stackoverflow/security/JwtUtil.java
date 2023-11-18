@@ -1,6 +1,6 @@
 package com.akerke.stackoverflow.security;
 
-import com.akerke.stackoverflow.constants.TokenType;
+import com.akerke.stackoverflow.common.constants.TokenType;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
